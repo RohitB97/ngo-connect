@@ -1,0 +1,112 @@
+<div class="container">
+	<div class="row">
+		<div *ngFor="let post of posts" class="col-md-4" style="margin-top: 5vh;">
+			<div class="card">
+  				<div class="card-body" style="color: black;">
+            <!-- <img class="card-img-top" src="{{post.image_url}}"> -->
+            <div class="image-forum" [style.backgroundImage]="'url('+post.image_url+')'"></div>
+            <hr>
+            <h5 style="text-align: center;" class="card-title">{{post.organization}}</h5>
+            <p class="card-text util_p">{{post.short_description}}</p>
+            <hr>
+            <div>
+              <span style="float: left;"><i class="fas fa-thumbs-up"></i>&nbsp;&nbsp;<span>{{post.supporters.length}} users ({{post.views_count}} views)</span></span>
+              <span style="float: right;"><i class="fas fa-map-marker-alt"></i>&nbsp;&nbsp;<span>{{post.location}}</span></span>
+            </div>
+            <br><br>
+            <a href="/details/{{post._id}}" class="btn btn-block btn-dark">View Post</a>
+  				</div>
+			</div>
+		</div>
+</div>
+
+<div class="modal fade" id="postModal" tabindex="-1" role="dialog" aria-labelledby="postModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="postModalTitle">Organization Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      
+      <form #postForm="ngForm">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="organization">Name of the Organization</label>
+            <input [(ngModel)]="new_post.organization" type="text" class="form-control" name="organization" id="organization" #organization="ngModel" required>
+            <div [hidden]="organization.valid || organization.untouched" class="alert alert-danger">
+              Please fill this field
+            </div>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="primaryField">Primary Field</label>
+            <input [(ngModel)]="new_post.field" type="text" class="form-control" name="primaryField" id="primaryField" #primaryField="ngModel" required>
+            <div [hidden]="primaryField.valid || primaryField.untouched" class="alert alert-danger">
+              Please fill this field
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-12">
+            <label for="address">Address</label>
+            <textarea [(ngModel)]="new_post.address" rows="2" class="form-control" name="address" id="address" #address="ngModel" required></textarea>
+            <div [hidden]="address.valid || address.untouched" class="alert alert-danger">
+              Please fill this field
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="location">City</label>
+            <input [(ngModel)]="new_post.location" type="text" class="form-control" name="location" id="location" #location="ngModel" required>
+            <div [hidden]="location.valid || location.untouched" class="alert alert-danger">
+              Please fill this field
+            </div>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="website">Website URL</label>
+            <input [(ngModel)]="new_post.website" type="text" class="form-control" name="website" id="website" #website="ngModel" required>
+            <div [hidden]="website.valid || website.untouched" class="alert alert-danger">
+              Please fill this field
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-12">
+            <label for="short">Short Description</label>
+            <textarea [(ngModel)]="new_post.short_description" rows="1" class="form-control" name="short" id="short" #short="ngModel" required></textarea>
+            <div [hidden]="short.valid || short.untouched" class="alert alert-danger">
+              Please fill this field
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-12">
+            <label for="long">Long Description</label>
+            <textarea [(ngModel)]="new_post.long_description" rows="3" class="form-control" name="long" id="long" #long="ngModel" required></textarea>
+            <div [hidden]="long.valid || long.untouched" class="alert alert-danger">
+              Please fill this field
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-12">
+            <label for="image_url">Paste the link to the logo</label>
+            <input [(ngModel)]="new_post.image_url" class="form-control" name="image_url" id="image_url" #image_url="ngModel" required>
+            <div [hidden]="image_url.valid || image_url.untouched" class="alert alert-danger">
+              Please fill this field
+            </div>
+          </div>
+        </div>
+      </form>
+      
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button [disabled]="!postForm.form.valid" type="button" class="btn btn-danger" (click)="addPost(postForm)" data-dismiss="modal">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>

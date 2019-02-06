@@ -1,0 +1,77 @@
+<div class="container">
+	<div style="color: black;background-color:rgb(161, 255, 188);text-align: center;margin-top: 5vh;"><br>
+		<div class="row">
+          <div class="col-md-4">
+            <h6><i class="fas fa-user"></i>&nbsp;&nbsp;{{user.name}}</h6>
+          </div>
+          <div class="col-md-4">
+            <h6><i class="fas fa-envelope"></i>&nbsp;&nbsp;{{user.email}}</h6>
+          </div>
+          <div class="col-md-4">
+            <h6><i class="fas fa-phone"></i>&nbsp;&nbsp;{{user.contact}}</h6>
+          </div>
+     	</div>
+     	<br>
+     	<div class="row">
+          <div class="col-md-6">
+            <h6><i class="fas fa-id-card"></i>&nbsp;&nbsp;{{user.designation}}</h6>
+          </div>
+          <div class="col-md-6">
+            <h6><i class="fas fa-user-friends"></i>&nbsp;&nbsp;{{user.team}}</h6>
+          </div>
+     	</div>
+     	<br>
+	</div>
+  <hr>
+
+     <h4 [hidden]="user.posts.length == 0" style="text-align: center;">Articles posted</h4>
+     <hr [hidden]="user.posts.length == 0">
+
+    <div [hidden]="user.posts.length == 0" class="row">
+		<div *ngFor="let post of user.posts" class="col-md-4" style="margin-top: 5vh;">
+			<div class="card">
+  			<div class="card-body" style="color: black;">
+            <div class="image-forum" [style.backgroundImage]="'url('+post.image_url+')'"></div>
+            <hr>
+            <h5 style="text-align: center;" class="card-title">{{post.organization}}</h5>
+            <p class="card-text util_p">{{post.short_description}}</p>
+            <hr>
+            <div>
+              <span style="float: left;"><i class="fas fa-thumbs-up"></i>&nbsp;&nbsp;<span>{{post.supporters.length}} users ({{post.views_count}} views)</span></span>
+              <span style="float: right;"><i class="fas fa-map-marker-alt"></i>&nbsp;&nbsp;<span>{{post.location}}</span></span>
+            </div>
+            <br><br>
+            <a href="/details/{{post._id}}" class="btn btn-block btn-dark">View Post</a>
+<!--             <a [hidden]="!guest && (user._id == post.author)" href="/details/{{post._id}}" class="btn btn-block btn-dark">View Post</a>
+            <a [hidden]="guest || (user._id != post.author)" href="/details/{{post._id}}" class="btn btn-dark" style="float: left;">View Post</a>
+            <button [hidden]="guest || (user._id != post.author)" class="btn btn-danger" style="float: right;" (click)="deletePost(post._id)">Delete Post</button> -->
+  			</div>
+			</div>
+		</div>
+	</div>
+	<hr [hidden]="user.posts.length == 0">
+
+	<h4 [hidden]="user.following.length == 0" style="text-align: center;">Articles supported</h4>
+  <hr [hidden]="user.following.length == 0">
+
+	<div [hidden]="user.following.length == 0" class="row">
+		<div *ngFor="let post of user.following" class="col-md-4" style="margin-top: 5vh;">
+			<div class="card">
+  				<div class="card-body" style="color: black;">
+            <div class="image-forum" [style.backgroundImage]="'url('+post.image_url+')'"></div>
+            <hr>
+            <h5 style="text-align: center;" class="card-title">{{post.organization}}</h5>
+            <p class="card-text util_p">{{post.short_description}}</p>
+            <hr>
+            <div>
+              <span style="float: left;"><i class="fas fa-thumbs-up"></i>&nbsp;&nbsp;<span>{{post.supporters.length}} users ({{post.views_count}} views)</span></span>
+              <span style="float: right;"><i class="fas fa-map-marker-alt"></i>&nbsp;&nbsp;<span>{{post.location}}</span></span>
+            </div>
+            <br><br>
+            <a href="/details/{{post._id}}" class="btn btn-block btn-dark">View Post</a>
+  				</div>
+			</div>
+		</div>
+	</div>
+	<hr [hidden]="user.following.length == 0">
+</div>

@@ -1,21 +1,133 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="btn btn-outline-success" href="/">Go to Home Page</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a [hidden]="guest" class="btn btn-outline-success" href="" data-toggle="modal" data-target="#postModal">Add an Organization</a>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+          </ul>
+
+          <button [hidden]="guest" class="btn btn-outline-success" (click)="logout()">Logout</button>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <a [hidden]="guest" class="btn btn-outline-success" href="/profile/{{user._id}}">Profile</a>
+          <a [hidden]="!guest" class="btn btn-outline-success" href="" data-toggle="modal" data-target="#loginModal">Sign In</a>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <a [hidden]="!guest" class="btn btn-outline-success" href="" data-toggle="modal" data-target="#registerModal">Register</a>
+        </div>
+</nav>
+
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="loginModalTitle">Login Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #loginForm="ngForm">
+          <div class="form-row">
+          <div class="form-group col-md-12">
+            <label for="email">Email</label>
+            <input type="email" [(ngModel)]="user.email" class="form-control" name="email" id="email" #email="ngModel" required>
+            <div [hidden]="email.valid || email.untouched" class="alert alert-danger">
+              Please fill this field
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-12">
+            <label for="password">Password</label>
+            <input type="password" [(ngModel)]="user.password" class="form-control" name="password" id="password" #password="ngModel" required>
+            <div [hidden]="password.valid || password.untouched" class="alert alert-danger">
+              Please fill this field
+            </div>
+          </div>
+        </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button [disabled]="!loginForm.form.valid" type="button" class="btn btn-danger" (click)="signIn(loginForm)" data-dismiss="modal">Login</button>
+      </div>
+    </div>
+  </div>
 </div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+
+<div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="registerModalTitle">Registration Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #registerForm="ngForm">
+        <div class="form-row">
+          <div class="form-group col-md-12">
+            <label for="name">Name</label>
+            <input [(ngModel)]="new_user.name" class="form-control" name="name" id="name" #name="ngModel" required>
+            <div [hidden]="name.valid || name.untouched" class="alert alert-danger">
+              Please fill this field
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-12">
+            <label for="contact">Mobile</label>
+            <input [(ngModel)]="new_user.contact" class="form-control" name="contact" id="contact" #contact="ngModel" required>
+            <div [hidden]="contact.valid || contact.untouched" class="alert alert-danger">
+              Please fill this field
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-12">
+            <label for="designation">Designation</label>
+            <input [(ngModel)]="new_user.designation" class="form-control" name="designation" id="designation" #designation="ngModel" required>
+            <div [hidden]="designation.valid || designation.untouched" class="alert alert-danger">
+              Please fill this field
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-12">
+            <label for="team">Team</label>
+            <input [(ngModel)]="new_user.team" class="form-control" name="team" id="team" #team="ngModel" required>
+            <div [hidden]="team.valid || team.untouched" class="alert alert-danger">
+              Please fill this field
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-12">
+            <label for="email">Email</label>
+            <input type="email" [(ngModel)]="new_user.email" class="form-control" name="email" id="email" #email="ngModel" required>
+            <div [hidden]="email.valid || email.untouched" class="alert alert-danger">
+              Please fill this field
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-12">
+            <label for="password">Password</label>
+            <input type="password" [(ngModel)]="new_user.password" class="form-control" name="password" id="password" #password="ngModel" required>
+            <div [hidden]="password.valid || password.untouched" class="alert alert-danger">
+              Please fill this field
+            </div>
+          </div>
+        </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button [disabled]="!registerForm.form.valid" type="button" class="btn btn-danger" (click)="signUp(registerForm)" data-dismiss="modal">Register</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <router-outlet></router-outlet>

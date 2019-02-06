@@ -1,0 +1,147 @@
+<div class="container" style="color: white;background-color: #343a40;margin-top: 5vh;">
+	<br>
+	<div>
+		<h3 style="text-align: center;">{{post.organization}}</h3>
+	</div>
+	<hr style="background-color: white;">
+	<br>
+	<div class="row">
+		<div class="col-md-3">
+			<h6 style="text-align: center;"><i>Information</i></h6>
+		</div>
+		<div class="col-md-9">
+			<h6>{{post.long_description}}</h6>
+		</div>
+	</div>
+	<hr style="background-color: white;">
+	<div class="row" style="margin-top: 5vh;">
+		<div class="col-md-3">
+			<h6 style="text-align: center;"><i>Address</i></h6>
+		</div>
+		<div class="col-md-9">
+			<h6>{{post.address}}</h6>
+		</div>
+	</div>
+	<hr style="background-color: white;">
+	<div class="row" style="margin-top: 5vh;">
+		<div class="col-md-3">
+			<h6 style="text-align: center;"><i>Country</i></h6>
+		</div>
+		<div class="col-md-9">
+			<h6>{{post.location}}</h6>
+		</div>
+	</div>
+	<hr style="background-color: white;">
+	<div class="row" style="margin-top: 5vh;">
+		<div class="col-md-3">
+			<h6 style="text-align: center;"><i>Website URL</i></h6>
+		</div>
+		<div class="col-md-9">
+			<h6>{{post.website}}</h6>
+		</div>
+	</div>
+	<hr style="background-color: white;">
+	<div class="row" style="margin-top: 5vh;">
+		<div class="col-md-3">
+			<h6 style="text-align: center;"><i>Primary Field</i></h6>
+		</div>
+		<div class="col-md-9">
+			<h6>{{post.field}}</h6>
+		</div>
+	</div>
+	<hr style="background-color: white;">
+	<div class="row" style="margin-top: 5vh;">
+		<div class="col-md-3">
+			<h6 style="text-align: center;"><i>Author's Name</i></h6>
+		</div>
+		<div class="col-md-9">
+			<h6><a href="/profile/{{post.author._id}}">{{post.author.name}}</a></h6>
+		</div>
+	</div>
+	<hr style="background-color: white;">
+	<div class="row" style="margin-top: 5vh;">
+		<div class="col-md-3">
+			<h6 style="text-align: center;"><i>Author's Email</i></h6>
+		</div>
+		<div class="col-md-9">
+			<h6>{{post.author.email}}</h6>
+		</div>
+	</div>
+	<hr style="background-color: white;">
+	<div class="row" style="margin-top: 5vh;">
+		<div class="col-md-3">
+			<h6 style="text-align: center;"><i>Author's Contact</i></h6>
+		</div>
+		<div class="col-md-9">
+			<h6>{{post.author.contact}}</h6>
+		</div>
+	</div>
+	<hr style="background-color: white;">
+	<div class="row" style="margin-top: 5vh;">
+		<div class="col-md-3">
+			<h6 style="text-align: center;"><i>Supported by</i></h6>
+		</div>
+		<div class="col-md-9">
+			<h6>{{post.supporters.length}} users</h6>
+		</div>
+	</div>
+	<hr style="background-color: white;">
+	<div [hidden]="post.comments.length == 0">
+		<h4 style="text-align: center;"><i>Comments ({{post.comments.length}})</i></h4><br>
+		<div *ngFor="let com of post.comments" class="row">
+			<div class="col-md-12">
+				<p style="margin-left: 1vw;"><i class="fas fa-user"></i>&nbsp;&nbsp;<i><b>{{com.user.name}}</b></i></p>
+				<p style="margin-left: 3vw;">{{com.comment}}</p>
+			</div>
+		</div>
+		<hr style="background-color: white;">
+	</div>
+	<div [hidden]="guest || (post.author._id == user._id)" class="row" style="margin-top: 3vh;">
+		<div class="col-md-6">
+			<h6 [hidden]="factor" style="text-align: center;"><button class="btn btn-success" (click)="support()">Support Cause</button></h6>
+			<h6 [hidden]="!factor" style="text-align: center;"><button class="btn btn-danger" (click)="withdraw()">Withdraw Support</button></h6>
+		</div>
+		<div class="col-md-6">
+			<h6 style="text-align: center;"><button class="btn btn-primary" data-toggle="modal" data-target="#commentModal">Add Comment</button></h6>
+		</div>
+	</div>
+
+	<div [hidden]="guest || (post.author._id != user._id)" class="row" style="margin-top: 3vh;">
+		<div class="col-md-12">
+			<h6 style="text-align: center;"><button class="btn btn-primary" data-toggle="modal" data-target="#commentModal">Add Comment</button></h6>
+		</div>
+	</div>
+	<hr [hidden]="guest" style="background-color: white;">
+</div>
+
+<div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentModalTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="commentModalTitle">Comment</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #commentForm="ngForm">
+          <div class="form-row">
+          <div class="form-group col-md-12">
+            <label for="comment">Please write down your comment</label>
+            <textarea [(ngModel)]="text" rows="5" class="form-control" name="comment" id="comment" #comment="ngModel" required></textarea>
+            <div [hidden]="comment.valid || comment.untouched" class="alert alert-danger">
+              Please fill this field
+            </div>
+          </div>
+        </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button [disabled]="!commentForm.form.valid" type="button" class="btn btn-danger" (click)="addComment(commentForm)" data-dismiss="modal">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
