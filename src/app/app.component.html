@@ -30,7 +30,7 @@
           <div class="form-row">
           <div class="form-group col-md-12">
             <label for="email">Email</label>
-            <input type="email" [(ngModel)]="user.email" class="form-control" name="email" id="email" #email="ngModel" required>
+            <input type="email" [(ngModel)]="co_user.email" class="form-control" name="email" id="email" #email="ngModel" required>
             <div [hidden]="email.valid || email.untouched" class="alert alert-danger">
               Please fill this field
             </div>
@@ -39,7 +39,7 @@
         <div class="form-row">
           <div class="form-group col-md-12">
             <label for="password">Password</label>
-            <input type="password" [(ngModel)]="user.password" class="form-control" name="password" id="password" #password="ngModel" required>
+            <input type="password" [(ngModel)]="co_user.password" class="form-control" name="password" id="password" #password="ngModel" required>
             <div [hidden]="password.valid || password.untouched" class="alert alert-danger">
               Please fill this field
             </div>

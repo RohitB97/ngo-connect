@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User } from './user';
+import { NewUser } from './new-user';
 
 @Component({
   selector: 'app-root',
@@ -9,18 +10,16 @@ import { User } from './user';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  user: User = {
-    _id: "",
+  co_user: NewUser = {
+    email: "",
+    password: "",
     name: "",
     designation: "",
     team: "",
-    email: "",
-    password: "",
     contact: ""
   };
   
-  new_user: User = {
-    _id: "",
+  new_user: NewUser = {
     name: "",
     designation: "",
     team: "",
@@ -30,6 +29,16 @@ export class AppComponent {
   };
   
   guest: boolean;
+  
+  user: User = {
+    _id: "",
+    name: "",
+    designation: "",
+    team: "",
+    email: "",
+    password: "",
+    contact: ""
+  };
 
   constructor(private http: HttpClient) {}
 
@@ -49,7 +58,7 @@ export class AppComponent {
   }
 
   signIn(form: NgForm): void{
-    this.http.post("/api/user/login", this.user).subscribe((obj:any) => {
+    this.http.post("/api/user/login", this.co_user).subscribe((obj:any) => {
     	if(obj.status){
         form.reset();
     		localStorage.setItem('auth_token', obj.auth_token);

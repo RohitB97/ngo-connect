@@ -67,6 +67,11 @@ app.get("/api/user/:token", function(req,res){
 
 app.get("/api/user/profile/:_id", function(req,res){
 	UserModel.findById(req.params._id).populate('following').populate('posts').exec(function(e,user){
+		if(e){
+			console.log(e);
+			return;
+		}
+
 		res.json(user);
 	});
 });
@@ -82,6 +87,11 @@ app.post("/api/user/signup", function(req,res){
 		req.body.password = hash;
 
 		UserModel.create(req.body, function(e,user){
+			if(e){
+				console.log(e);
+				return;
+			}
+
 			res.json({status:true});
 		});
 	});
@@ -90,12 +100,17 @@ app.post("/api/user/signup", function(req,res){
 app.post("/api/user/login", function(req,res){
 	UserModel.findOne({email: req.body.email}, function(err,user){
 		if(err){
-			console.log("Login query error");
+			console.log(err);
 			return;
 		}
 
 		if(user){
 			bcrypt.compare(req.body.password,user.password,function(e,result){
+				if(e){
+					console.log(e);
+					return;
+				}
+
 				if(result){
 					var token = jwt.sign({_id: user._id},"ngoForum",{});
 					res.json({status:true, message: 'Authentication Success', auth_token: token});
@@ -115,34 +130,66 @@ app.post("/api/user/login", function(req,res){
 
 app.get("/api/posts", function(req,res){
 	PostModel.find(function(err,posts){
+		if(err){
+			console.log(err);
+			return;
+		}
+
 		res.json(posts);
 	});
 });
 
 app.get("/api/post/:_id", function(req,res){
 	PostModel.findById(req.params._id, function(err,post){
-		post.views_count = post.views_count + 1;
-		post.save(function(e,p1){
-			PostModel.populate(p1,[{path:'author'},{path:'comments',populate:{path:'user'}}],function(e3,p2){
-				res.json(p2);
+		if(err){
+			console.log(err);
+			return;
+		}
+
+		if(post){
+			post.views_count = post.views_count + 1;
+			post.save(function(e,p1){
+				if(e){
+					console.log(e);
+					return;
+				}
+
+				PostModel.populate(p1,[{path:'author'},{path:'comments',populate:{path:'user'}}],function(e3,p2){
+					res.json(p2);
+				});
 			});
-		});
+		}
+
+		else{
+			res.json({status:false ,message:"Post not found"});
+		}
 	});
 });
 
 app.put("/api/post/support", function(req,res){
 	UserModel.findById(req.body.user_id, function(error,user){
-		user.following.push(req.body.post_id);
-		user.save(function(err,u){
-			PostModel.findById(req.body.post_id, function(er, post){
-				post.supporters.push(u._id);
-				post.save(function(e,p1){
-					PostModel.populate(p1,[{path:'author'},{path:'comments',populate:{path:'user'}}],function(e3,p2){
-						res.json({user:u, post:p2});
+		if(error){
+			console.log(error);
+			return;
+		}
+
+		if(user){
+			user.following.push(req.body.post_id);
+			user.save(function(err,u){
+				PostModel.findById(req.body.post_id, function(er, post){
+					post.supporters.push(u._id);
+					post.save(function(e,p1){
+						PostModel.populate(p1,[{path:'author'},{path:'comments',populate:{path:'user'}}],function(e3,p2){
+							res.json({user:u, post:p2});
+						});
 					});
 				});
 			});
-		});
+		}
+
+		else{
+			res.json({status:false ,message: "User not found"});
+		}
 	});
 });
 
